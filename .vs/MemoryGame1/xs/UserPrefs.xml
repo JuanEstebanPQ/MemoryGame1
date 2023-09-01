@@ -1,0 +1,28 @@
+﻿<Properties StartupConfiguration="{42F0B580-7061-BAAB-96B7-FAFBBDCACC93}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameControllerScript.cs">
+    <Files>
+      <File FileName="Assets/Scripts/GameControllerScript.cs" Line="18" Column="38" />
+      <File FileName="Assets/Scripts/MainImageScript.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MemoryGame1" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="GameControllerScript.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="c140f9a0-f4c4-4828-896c-4b7feefe0411" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
