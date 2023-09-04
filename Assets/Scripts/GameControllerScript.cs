@@ -8,8 +8,15 @@ public class GameControllerScript : MonoBehaviour
     public const int columns = 4;
     public const int rows = 4;
 
+    private MainImageScript playerStandingCard;
+
     public const float Xspace = 2f;
     public const float Yspace = 2f;
+
+
+    private int defaultCardId;
+
+    private MainImageScript permanentRevealedCard;
 
     [SerializeField] private MainImageScript startObject;
     [SerializeField] private Sprite[] images;
@@ -29,6 +36,7 @@ public class GameControllerScript : MonoBehaviour
 
     private void Start()
     {
+        defaultCardId = Random.Range(0, images.Length);
 
         int[] locations = { 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3 };
         locations = Randomiser(locations);
@@ -60,10 +68,10 @@ public class GameControllerScript : MonoBehaviour
             }
         }
 
-        StartCoroutine(ShowCardsBriefly(1.0f));
+        StartCoroutine(ShowAllCardsBriefly(1.0f));
     }
 
-    private IEnumerator ShowCardsBriefly(float duration)
+    private IEnumerator ShowAllCardsBriefly(float duration)
     {
         foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
         {
@@ -76,6 +84,17 @@ public class GameControllerScript : MonoBehaviour
         {
             card.Close();
         }
+
+        int randomIndex = Random.Range(0, columns * rows);
+        MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
+        permanentRevealedCard = allCards[randomIndex];
+        permanentRevealedCard.Show();
+    }
+    
+
+    public MainImageScript PermanentRevealedCard
+    {
+        get { return permanentRevealedCard; }
     }
 
     private MainImageScript firstOpen;
@@ -87,6 +106,8 @@ public class GameControllerScript : MonoBehaviour
     [SerializeField] private TextMesh scoreText;
     [SerializeField] private TextMesh attemptsText;
 
+    private bool timeUp = false;
+
     public bool canOpen
     {
         get { return secondOpen == null; }
@@ -97,19 +118,57 @@ public class GameControllerScript : MonoBehaviour
         if (firstOpen == null)
         {
             firstOpen = startObject;
-        }
-        else
-        {
-            secondOpen = startObject;
-            StartCoroutine(CheckGuessed());
+
+            // Evita que la misma carta se compare consigo misma
+            if (firstOpen != permanentRevealedCard)
+            {
+                StartCoroutine(CheckGuessed());
+            }
         }
     }
+
+    public void AddScore()
+    {
+        score++;
+        scoreText.text = "Score: " + score;
+    }
+
+    public void OnTimeUp()
+    {
+        if (timeUp)
+        {
+            // Verifica si el jugador está tocando una carta
+            if (playerStandingCard != null)
+            {
+                if (playerStandingCard.spriteId == permanentRevealedCard.spriteId)
+                {
+                    // La carta es igual a la permanente, suma puntos
+                    AddScore();
+                }
+                else
+                {
+                    // La carta es diferente, puedes hacer algo aquí, como destruir la carta
+                    Destroy(playerStandingCard.gameObject);
+                }
+
+                playerStandingCard = null; // Restablece la carta del jugador
+            }
+        }
+    }
+
+    public void RevealAllCards()
+{
+    foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
+    {
+        card.Show();
+    }
+}
 
 
     //Compara los 2 objetos
     private IEnumerator CheckGuessed()
     {
-        if (firstOpen.spriteId == secondOpen.spriteId)
+        if (firstOpen.spriteId == permanentRevealedCard.spriteId)
         {
             score++;
             scoreText.text = "Score: " + score;
@@ -119,7 +178,6 @@ public class GameControllerScript : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             firstOpen.Close();
-            secondOpen.Close();
         }
 
         attempts++;
@@ -127,7 +185,6 @@ public class GameControllerScript : MonoBehaviour
         attemptsText.text = "Attempt: " + attempts;
 
         firstOpen = null;
-        secondOpen = null;
     }
 
     public void Restart()
