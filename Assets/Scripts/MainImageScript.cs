@@ -5,18 +5,19 @@ using UnityEngine;
 public class MainImageScript : MonoBehaviour
 {
     [SerializeField] private GameObject Unknow;
-    [SerializeField] private GameControllerScript gameController;
+    
+    // [SerializeField] private GameControllerScript gameController;
 
-    public void OnMouseDown()
+    // public void OnMouseDown()
 
-    {
+    // {
 
-        if (Unknow.activeSelf && gameController.canOpen)
-        {
-            Unknow.SetActive(false);
-            gameController.imageOpened(this);
-        }
-    }
+    //     if (Unknow.activeSelf && gameController.canOpen)
+    //     {
+    //         Unknow.SetActive(false);
+    //         gameController.imageOpened(this);
+    //     }
+    // }
 
     private int _spriteId;
     public int spriteId

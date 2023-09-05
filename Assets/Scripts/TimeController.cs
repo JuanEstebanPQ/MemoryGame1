@@ -22,14 +22,14 @@ public class TimeController : MonoBehaviour
 
     void Update()
     {
-        if (enMarcha) // Asegúrate de que el tiempo no haya terminado
+        if (enMarcha)
         {
             restante -= Time.deltaTime;
             if (restante < 1)
             {
-                enMarcha = false;
-                // El tiempo ha llegado a 00:00, no necesitas marcar isTimeUp aquí
-            }
+            enMarcha = false;
+            gameController.OnTimeUp(); // Llama a la función para verificar la carta al finalizar el tiempo
+        }
 
             int tempMin = Mathf.FloorToInt(restante / 60);
             int tempSeg = Mathf.FloorToInt(restante % 60);

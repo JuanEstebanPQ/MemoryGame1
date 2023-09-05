@@ -10,11 +10,8 @@ public class GameControllerScript : MonoBehaviour
 
     private MainImageScript playerStandingCard;
 
-    public const float Xspace = 2f;
-    public const float Yspace = 2f;
-
-
-    private int defaultCardId;
+    public const float Xspace = 1.2f;
+    public const float Yspace = 1.2f;
 
     private MainImageScript permanentRevealedCard;
 
@@ -36,16 +33,14 @@ public class GameControllerScript : MonoBehaviour
 
     private void Start()
     {
-        defaultCardId = Random.Range(0, images.Length);
-
-        int[] locations = { 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3 };
-        locations = Randomiser(locations);
+        int gridSize = 6; // Tamaño de la cuadrícula (6x6)
+        int[] locations = RandomCards(gridSize * gridSize);
 
         Vector3 startPosition = startObject.transform.position;
 
-        for (int i = 0; i < columns; i++)
+        for (int i = 0; i < gridSize; i++)
         {
-            for (int j = 0; j < rows; j++)
+            for (int j = 0; j < gridSize; j++)
             {
                 MainImageScript gameImage;
                 if (i == 0 && j == 0)
@@ -57,7 +52,7 @@ public class GameControllerScript : MonoBehaviour
                     gameImage = Instantiate(startObject) as MainImageScript;
                 }
 
-                int index = j * columns + i;
+                int index = j * gridSize + i;
                 int id = locations[index];
                 gameImage.ChangeSprite(id, images[id]);
 
@@ -69,6 +64,21 @@ public class GameControllerScript : MonoBehaviour
         }
 
         StartCoroutine(ShowAllCardsBriefly(1.0f));
+    }
+
+    private int[] RandomCards(int count)
+    {
+        int[] originalCards = { 0, 1, 2 }; // Numero de las imagenes
+        int[] randomCards = new int[count];
+
+        System.Random rng = new System.Random();
+        for (int i = 0; i < count; i++)
+        {
+            int randomIndex = rng.Next(originalCards.Length);
+            randomCards[i] = originalCards[randomIndex];
+        }
+
+        return randomCards;
     }
 
     private IEnumerator ShowAllCardsBriefly(float duration)
@@ -90,7 +100,7 @@ public class GameControllerScript : MonoBehaviour
         permanentRevealedCard = allCards[randomIndex];
         permanentRevealedCard.Show();
     }
-    
+
 
     public MainImageScript PermanentRevealedCard
     {
@@ -98,7 +108,7 @@ public class GameControllerScript : MonoBehaviour
     }
 
     private MainImageScript firstOpen;
-    private MainImageScript secondOpen;
+    // private MainImageScript secondOpen;
 
     private int score = 0;
     private int attempts = 0;
@@ -108,24 +118,24 @@ public class GameControllerScript : MonoBehaviour
 
     private bool timeUp = false;
 
-    public bool canOpen
-    {
-        get { return secondOpen == null; }
-    }
+    // public bool canOpen
+    // {
+    //     get { return secondOpen == null; }
+    // }
 
-    public void imageOpened(MainImageScript startObject)
-    {
-        if (firstOpen == null)
-        {
-            firstOpen = startObject;
+    // public void imageOpened(MainImageScript startObject)
+    // {
+    //     if (firstOpen == null)
+    //     {
+    //         firstOpen = startObject;
 
-            // Evita que la misma carta se compare consigo misma
-            if (firstOpen != permanentRevealedCard)
-            {
-                StartCoroutine(CheckGuessed());
-            }
-        }
-    }
+    //         // Evita que la misma carta se compare consigo misma
+    //         if (firstOpen != permanentRevealedCard)
+    //         {
+    //             StartCoroutine(CheckGuessed());
+    //         }
+    //     }
+    // }
 
     public void AddScore()
     {
@@ -156,13 +166,26 @@ public class GameControllerScript : MonoBehaviour
         }
     }
 
+    // public void RevealAllCards()
+    // {
+    //     foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
+    //     {
+    //         card.Show();
+    //     }
+    // }
+
     public void RevealAllCards()
-{
-    foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
     {
-        card.Show();
+        MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
+
+        foreach (MainImageScript card in allCards)
+        {
+            if (card.spriteId == permanentRevealedCard.spriteId)
+            {
+                card.Show();
+            }
+        }
     }
-}
 
 
     //Compara los 2 objetos
