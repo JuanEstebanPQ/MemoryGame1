@@ -27,9 +27,8 @@ public class TimeController : MonoBehaviour
             restante -= Time.deltaTime;
             if (restante < 1)
             {
-            enMarcha = false;
-            gameController.OnTimeUp(); // Llama a la función para verificar la carta al finalizar el tiempo
-        }
+                enMarcha = false;
+            }
 
             int tempMin = Mathf.FloorToInt(restante / 60);
             int tempSeg = Mathf.FloorToInt(restante % 60);
@@ -38,7 +37,7 @@ public class TimeController : MonoBehaviour
 
         if (!enMarcha)
         {
-            gameController.RevealAllCards(); // Llama al método en el GameController para revelar todas las cartas
+            gameController.RevealAllCards(); //revelar todas las cartas
         }
     }
 }

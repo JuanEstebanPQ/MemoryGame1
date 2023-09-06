@@ -10,30 +10,18 @@ public class GameControllerScript : MonoBehaviour
 
     private MainImageScript playerStandingCard;
 
-    public const float Xspace = 1.2f;
-    public const float Yspace = 1.2f;
+    public const float Xspace = 1;
+    public const float Yspace = 1;
 
     private MainImageScript permanentRevealedCard;
 
     [SerializeField] private MainImageScript startObject;
     [SerializeField] private Sprite[] images;
-    private int[] Randomiser(int[] locations)
-    {
-        int[] array = locations.Clone() as int[];
-        for (int i = 0; i < array.Length; i++)
-        {
-            int newArray = array[i];
-            int j = Random.Range(i, array.Length);
-            array[i] = array[j];
-            array[j] = newArray;
-        }
 
-        return array;
-    }
 
     private void Start()
     {
-        int gridSize = 6; // Tamaño de la cuadrícula (6x6)
+        int gridSize = 6; // Tamaño de la cuadrícula ( 6x6 o la cantidad que decida)
         int[] locations = RandomCards(gridSize * gridSize);
 
         Vector3 startPosition = startObject.transform.position;
@@ -88,7 +76,7 @@ public class GameControllerScript : MonoBehaviour
             card.Show();
         }
 
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(10.0f);
 
         foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
         {
@@ -111,12 +99,10 @@ public class GameControllerScript : MonoBehaviour
     // private MainImageScript secondOpen;
 
     private int score = 0;
-    private int attempts = 0;
+
 
     [SerializeField] private TextMesh scoreText;
-    [SerializeField] private TextMesh attemptsText;
 
-    private bool timeUp = false;
 
     // public bool canOpen
     // {
@@ -143,29 +129,6 @@ public class GameControllerScript : MonoBehaviour
         scoreText.text = "Score: " + score;
     }
 
-    public void OnTimeUp()
-    {
-        if (timeUp)
-        {
-            // Verifica si el jugador está tocando una carta
-            if (playerStandingCard != null)
-            {
-                if (playerStandingCard.spriteId == permanentRevealedCard.spriteId)
-                {
-                    // La carta es igual a la permanente, suma puntos
-                    AddScore();
-                }
-                else
-                {
-                    // La carta es diferente, puedes hacer algo aquí, como destruir la carta
-                    Destroy(playerStandingCard.gameObject);
-                }
-
-                playerStandingCard = null; // Restablece la carta del jugador
-            }
-        }
-    }
-
     // public void RevealAllCards()
     // {
     //     foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
@@ -183,6 +146,14 @@ public class GameControllerScript : MonoBehaviour
             if (card.spriteId == permanentRevealedCard.spriteId)
             {
                 card.Show();
+            }
+            else
+            {
+                SpriteRenderer cardRenderer = card.GetComponent<SpriteRenderer>();
+                if (cardRenderer != null)
+                {
+                    cardRenderer.color = Color.gray;
+                }
             }
         }
     }
@@ -202,12 +173,6 @@ public class GameControllerScript : MonoBehaviour
 
             firstOpen.Close();
         }
-
-        attempts++;
-
-        attemptsText.text = "Attempt: " + attempts;
-
-        firstOpen = null;
     }
 
     public void Restart()
