@@ -5,19 +5,7 @@ using UnityEngine;
 public class MainImageScript : MonoBehaviour
 {
     [SerializeField] private GameObject Unknow;
-    
-    // [SerializeField] private GameControllerScript gameController;
-
-    // public void OnMouseDown()
-
-    // {
-
-    //     if (Unknow.activeSelf && gameController.canOpen)
-    //     {
-    //         Unknow.SetActive(false);
-    //         gameController.imageOpened(this);
-    //     }
-    // }
+    [SerializeField] private GameObject Hole;
 
     private int _spriteId;
     public int spriteId
@@ -39,6 +27,16 @@ public class MainImageScript : MonoBehaviour
     public void Show()
     {
         Unknow.SetActive(false);
+    }
+
+    public void CloseHole()
+    {
+        Hole.SetActive(false);
+    }
+
+    public void ShowHole()
+    {
+        Hole.SetActive(true);
     }
 
 }

@@ -18,6 +18,7 @@ public class GameControllerScript : MonoBehaviour
     [SerializeField] private MainImageScript startObject;
     [SerializeField] private Sprite[] images;
 
+    [SerializeField] private GameObject randomCardObjetive;
 
     private void Start()
     {
@@ -71,107 +72,54 @@ public class GameControllerScript : MonoBehaviour
 
     private IEnumerator ShowAllCardsBriefly(float duration)
     {
-        foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
+        MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
+
+        foreach (MainImageScript card in allCards)
         {
             card.Show();
+            card.CloseHole();
         }
 
         yield return new WaitForSeconds(10.0f);
 
-        foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
+        foreach (MainImageScript card in allCards)
         {
             card.Close();
         }
+        int randomIndex = Random.Range(0, allCards.Length);
+        MainImageScript selectedCard = allCards[randomIndex];
 
-        int randomIndex = Random.Range(0, columns * rows);
-        MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
-        permanentRevealedCard = allCards[randomIndex];
-        permanentRevealedCard.Show();
+        SpriteRenderer randomCardRenderer = randomCardObjetive.GetComponent<SpriteRenderer>();
+        if (randomCardRenderer != null)
+        {
+            randomCardRenderer.sprite = selectedCard.GetComponent<SpriteRenderer>().sprite;
+        }
+
+        permanentRevealedCard = selectedCard;
     }
-
 
     public MainImageScript PermanentRevealedCard
     {
         get { return permanentRevealedCard; }
     }
-
-    private MainImageScript firstOpen;
-    // private MainImageScript secondOpen;
-
-    private int score = 0;
-
-
-    [SerializeField] private TextMesh scoreText;
-
-
-    // public bool canOpen
-    // {
-    //     get { return secondOpen == null; }
-    // }
-
-    // public void imageOpened(MainImageScript startObject)
-    // {
-    //     if (firstOpen == null)
-    //     {
-    //         firstOpen = startObject;
-
-    //         // Evita que la misma carta se compare consigo misma
-    //         if (firstOpen != permanentRevealedCard)
-    //         {
-    //             StartCoroutine(CheckGuessed());
-    //         }
-    //     }
-    // }
-
-    public void AddScore()
-    {
-        score++;
-        scoreText.text = "Score: " + score;
-    }
-
-    // public void RevealAllCards()
-    // {
-    //     foreach (MainImageScript card in FindObjectsOfType<MainImageScript>())
-    //     {
-    //         card.Show();
-    //     }
-    // }
-
     public void RevealAllCards()
     {
-        MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
-
-        foreach (MainImageScript card in allCards)
+        if (permanentRevealedCard != null)
         {
-            if (card.spriteId == permanentRevealedCard.spriteId)
+            MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
+
+            foreach (MainImageScript card in allCards)
             {
-                card.Show();
-            }
-            else
-            {
-                SpriteRenderer cardRenderer = card.GetComponent<SpriteRenderer>();
-                if (cardRenderer != null)
+                if (card.spriteId == permanentRevealedCard.spriteId)
                 {
-                    cardRenderer.color = Color.gray;
+                    card.Show();
+                }
+                else
+                {
+                    card.Show();
+                    card.ShowHole();
                 }
             }
-        }
-    }
-
-
-    //Compara los 2 objetos
-    private IEnumerator CheckGuessed()
-    {
-        if (firstOpen.spriteId == permanentRevealedCard.spriteId)
-        {
-            score++;
-            scoreText.text = "Score: " + score;
-        }
-        else
-        {
-            yield return new WaitForSeconds(0.5f);
-
-            firstOpen.Close();
         }
     }
 

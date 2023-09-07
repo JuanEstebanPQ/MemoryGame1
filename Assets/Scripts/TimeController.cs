@@ -37,7 +37,17 @@ public class TimeController : MonoBehaviour
 
         if (!enMarcha)
         {
-            gameController.RevealAllCards(); //revelar todas las cartas
+            gameController.RevealAllCards(); // Revelar todas las cartas
+
+            // Cambiar tiempoEnMarcha a false en el PlayerController
+            FindObjectOfType<PlayerController>().SetTiempoEnMarcha(false);
+            FindObjectOfType<PlayerController>().SetMoviendo(false);
+
+            MainImageScript[] allCards = FindObjectsOfType<MainImageScript>();
+            foreach (MainImageScript card in allCards)
+            {
+                card.GetComponent<Collider2D>().enabled = true;
+            }
         }
     }
 }

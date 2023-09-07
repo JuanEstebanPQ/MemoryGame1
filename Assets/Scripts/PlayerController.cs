@@ -12,14 +12,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask Wall;
     [SerializeField] private float radioCirculo;
 
+    Animator animator;
+
+    private bool tiempoEnMarcha = true;
+
     private bool moviendo = false;
 
     private Vector2 input;
+    private GameControllerScript gameController;
 
     private void Start()
     {
 
         puntoMovimiento = transform.position;
+        gameController = FindObjectOfType<GameControllerScript>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -53,6 +60,48 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(puntoMovimiento + offsetPuntoMovimiento, radioCirculo);
+    }
+
+    public void SetTiempoEnMarcha(bool value)
+    {
+        tiempoEnMarcha = value;
+    }
+
+    public void SetMoviendo(bool value)
+    {
+        moviendo = value;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (tiempoEnMarcha) // Verifica si el tiempo está en marcha
+        {
+            return; // No realices ninguna acción si el tiempo está en marcha
+        }
+
+        if (other.CompareTag("Card"))
+        {
+            MainImageScript card = other.GetComponent<MainImageScript>();
+            if (card != null)
+            {
+                // Comparar si la carta es igual a la permanente revelada
+                if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
+                {
+                    Debug.Log("El jugador tocó una carta correcta.");
+                }
+                else
+                {
+                    animator.Play("Death");
+                }
+
+            }
+        }
+
+    }
+
+    private void Death()
+    {
+        Destroy(gameObject);
     }
 
     //     public float speed = 5f;
