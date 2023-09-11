@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 input;
     private GameControllerScript gameController;
 
+    [SerializeField] private GameObject succesMessage;
+    [SerializeField] private GameObject failedMessage;
+
     private void Start()
     {
 
@@ -76,7 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         if (tiempoEnMarcha) // Verifica si el tiempo está en marcha
         {
-            return; // No realices ninguna acción si el tiempo está en marcha
+            return;
         }
 
         if (other.CompareTag("Card"))
@@ -87,11 +90,13 @@ public class PlayerController : MonoBehaviour
                 // Comparar si la carta es igual a la permanente revelada
                 if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
                 {
-                    Debug.Log("El jugador tocó una carta correcta.");
+                    StartCoroutine(ShowSuccesMessageWithDelay());
                 }
                 else
                 {
                     animator.Play("Death");
+
+                    StartCoroutine(ShowFailedMessageWithDelay());
                 }
 
             }
@@ -101,57 +106,29 @@ public class PlayerController : MonoBehaviour
 
     private void Death()
     {
-        Destroy(gameObject);
+        SpriteRenderer playerRenderer = GetComponent<SpriteRenderer>();
+        if (playerRenderer != null)
+        {
+            playerRenderer.enabled = false;
+        }
     }
 
-    //     public float speed = 5f;
-    //     public Vector2 direction;
+    private IEnumerator ShowSuccesMessageWithDelay()
+    {
+        yield return new WaitForSeconds(2f);
 
-    //     Rigidbody2D rigidBody;
 
-    //     private GameControllerScript gameController;
+        succesMessage.SetActive(true);
+    }
 
-    //     public void Start()
-    //     {
-    //         rigidBody = GetComponent<Rigidbody2D>();
-    //         gameController = FindObjectOfType<GameControllerScript>();
-    //     }
+    private IEnumerator ShowFailedMessageWithDelay()
+    {
+        Debug.Log("Esperando 2 segundos antes de mostrar failedMessage");
+        yield return new WaitForSeconds(2f);
 
-    //     private void FixedUpdate()
-    //     {
-    //         rigidBody.velocity = direction * speed;
-    //     }
+        Debug.Log("Mostrando failedMessage");
+        failedMessage.SetActive(true);
+    }
 
-    //     private void Update()
-    //     {
-    //         Movement();
-    //     }
-
-    //     private void Movement()
-    //     {
-    //         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-    //     }
-
-    //     private void OnTriggerEnter2D(Collider2D other)
-    // {
-    //     if (other.CompareTag("Card")) // Asegúrate de que las cartas tengan el mismo tag
-    //     {
-    //         MainImageScript card = other.GetComponent<MainImageScript>();
-    //         if (card != null)
-    //         {
-    //             // Comparar si la carta es igual a la permanente revelada
-    //             if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
-    //             {
-    //                 // La carta es igual a la permanente, suma puntos o realiza acciones
-    //                 gameController.AddScore();
-    //             }
-    //             else
-    //             {
-    //                 // La carta es diferente, puedes hacer algo aquí, como destruir la carta
-    //                 Destroy(other.gameObject);
-    //             }
-    //         }
-    //     }
-    // }
 
 }

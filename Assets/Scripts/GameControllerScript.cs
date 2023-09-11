@@ -20,6 +20,8 @@ public class GameControllerScript : MonoBehaviour
 
     [SerializeField] private GameObject randomCardObjetive;
 
+    // private int correctCardCount = 0;
+
     private void Start()
     {
         int gridSize = 6; // Tamaño de la cuadrícula ( 6x6 o la cantidad que decida)
@@ -122,6 +124,7 @@ public class GameControllerScript : MonoBehaviour
             }
         }
     }
+
 
     public void Restart()
     {
