@@ -8,7 +8,6 @@ public class GameControllerScript : MonoBehaviour
     public const int columns = 4;
     public const int rows = 4;
 
-    private MainImageScript playerStandingCard;
 
     public const float Xspace = 1;
     public const float Yspace = 1;
@@ -20,10 +19,19 @@ public class GameControllerScript : MonoBehaviour
 
     [SerializeField] private GameObject randomCardObjetive;
 
-    // private int correctCardCount = 0;
+    private int maxCards = 3;
+
+
 
     private void Start()
     {
+
+        int[] originalCards = new int[maxCards];
+        for (int i = 0; i < maxCards; i++)
+        {
+            originalCards[i] = i;
+        }
+
         int gridSize = 6; // Tamaño de la cuadrícula ( 6x6 o la cantidad que decida)
         int[] locations = RandomCards(gridSize * gridSize);
 
@@ -57,20 +65,47 @@ public class GameControllerScript : MonoBehaviour
         StartCoroutine(ShowAllCardsBriefly(1.0f));
     }
 
+
     private int[] RandomCards(int count)
+{
+    // Asegúrate de que count sea igual o mayor que maxCards
+    if (count < maxCards)
     {
-        int[] originalCards = { 0, 1, 2 }; // Numero de las imagenes
-        int[] randomCards = new int[count];
-
-        System.Random rng = new System.Random();
-        for (int i = 0; i < count; i++)
-        {
-            int randomIndex = rng.Next(originalCards.Length);
-            randomCards[i] = originalCards[randomIndex];
-        }
-
-        return randomCards;
+        count = maxCards;
     }
+
+    int[] originalCards = new int[maxCards];
+    for (int i = 0; i < maxCards; i++)
+    {
+        originalCards[i] = i;
+    }
+
+    int[] randomCards = new int[count];
+
+    System.Random rng = new System.Random();
+    for (int i = 0; i < count; i++)
+    {
+        int randomIndex = rng.Next(maxCards);
+        randomCards[i] = originalCards[randomIndex];
+    }
+
+    return randomCards;
+}
+
+// private int[] RandomCards(int count)
+//     {
+//         int[] originalCards = { 0, 1, 2 }; // Numero de las imagenes
+//         int[] randomCards = new int[count];
+
+//         System.Random rng = new System.Random();
+//         for (int i = 0; i < count; i++)
+//         {
+//             int randomIndex = rng.Next(originalCards.Length);
+//             randomCards[i] = originalCards[randomIndex];
+//         }
+
+//         return randomCards;
+//     }
 
     private IEnumerator ShowAllCardsBriefly(float duration)
     {

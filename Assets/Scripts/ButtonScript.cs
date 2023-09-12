@@ -6,6 +6,7 @@ public class ButtonScript : MonoBehaviour
 {
     [SerializeField] private GameControllerScript gameController;
     [SerializeField] private string functionOnClick;
+    
 
     public void OnMouseOver()
     {

@@ -123,10 +123,8 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator ShowFailedMessageWithDelay()
     {
-        Debug.Log("Esperando 2 segundos antes de mostrar failedMessage");
         yield return new WaitForSeconds(2f);
 
-        Debug.Log("Mostrando failedMessage");
         failedMessage.SetActive(true);
     }
 
