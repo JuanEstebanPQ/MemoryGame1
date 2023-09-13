@@ -19,7 +19,7 @@ public class GameControllerScript : MonoBehaviour
 
     [SerializeField] private GameObject randomCardObjetive;
 
-    private int maxCards = 3;
+    public int maxCards = 3;
 
 
 
@@ -31,6 +31,8 @@ public class GameControllerScript : MonoBehaviour
         {
             originalCards[i] = i;
         }
+
+        maxCards = PlayerPrefs.GetInt("MaxCards", 3);
 
         int gridSize = 6; // Tamaño de la cuadrícula ( 6x6 o la cantidad que decida)
         int[] locations = RandomCards(gridSize * gridSize);
@@ -67,45 +69,45 @@ public class GameControllerScript : MonoBehaviour
 
 
     private int[] RandomCards(int count)
-{
-    // Asegúrate de que count sea igual o mayor que maxCards
-    if (count < maxCards)
     {
-        count = maxCards;
+        // Asegúrate de que count sea igual o mayor que maxCards
+        if (count < maxCards)
+        {
+            count = maxCards;
+        }
+
+        int[] originalCards = new int[maxCards];
+        for (int i = 0; i < maxCards; i++)
+        {
+            originalCards[i] = i;
+        }
+
+        int[] randomCards = new int[count];
+
+        System.Random rng = new System.Random();
+        for (int i = 0; i < count; i++)
+        {
+            int randomIndex = rng.Next(maxCards);
+            randomCards[i] = originalCards[randomIndex];
+        }
+
+        return randomCards;
     }
 
-    int[] originalCards = new int[maxCards];
-    for (int i = 0; i < maxCards; i++)
-    {
-        originalCards[i] = i;
-    }
+    // private int[] RandomCards(int count)
+    //     {
+    //         int[] originalCards = { 0, 1, 2 }; // Numero de las imagenes
+    //         int[] randomCards = new int[count];
 
-    int[] randomCards = new int[count];
+    //         System.Random rng = new System.Random();
+    //         for (int i = 0; i < count; i++)
+    //         {
+    //             int randomIndex = rng.Next(originalCards.Length);
+    //             randomCards[i] = originalCards[randomIndex];
+    //         }
 
-    System.Random rng = new System.Random();
-    for (int i = 0; i < count; i++)
-    {
-        int randomIndex = rng.Next(maxCards);
-        randomCards[i] = originalCards[randomIndex];
-    }
-
-    return randomCards;
-}
-
-// private int[] RandomCards(int count)
-//     {
-//         int[] originalCards = { 0, 1, 2 }; // Numero de las imagenes
-//         int[] randomCards = new int[count];
-
-//         System.Random rng = new System.Random();
-//         for (int i = 0; i < count; i++)
-//         {
-//             int randomIndex = rng.Next(originalCards.Length);
-//             randomCards[i] = originalCards[randomIndex];
-//         }
-
-//         return randomCards;
-//     }
+    //         return randomCards;
+    //     }
 
     private IEnumerator ShowAllCardsBriefly(float duration)
     {
@@ -139,6 +141,7 @@ public class GameControllerScript : MonoBehaviour
     {
         get { return permanentRevealedCard; }
     }
+
     public void RevealAllCards()
     {
         if (permanentRevealedCard != null)
@@ -163,6 +166,39 @@ public class GameControllerScript : MonoBehaviour
 
     public void Restart()
     {
+
         SceneManager.LoadScene("MainScene");
+    }
+
+
+    private void ReturnToMenuScene()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void Jugar1()
+    {
+        maxCards = 3;
+        PlayerPrefs.SetInt("MaxCards", maxCards);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void Jugar2()
+    {
+        maxCards = 4;
+        PlayerPrefs.SetInt("MaxCards", maxCards); // Guardar el nuevo valor en PlayerPrefs
+        PlayerPrefs.Save(); // Guarda los cambios en PlayerPrefs
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void Jugar3()
+    {
+        maxCards = 5;
+        PlayerPrefs.SetInt("MaxCards", maxCards);
+        PlayerPrefs.Save();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

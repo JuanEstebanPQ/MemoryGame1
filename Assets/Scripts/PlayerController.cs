@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour
                 if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
                 {
                     StartCoroutine(ShowSuccesMessageWithDelay());
+
                 }
                 else
                 {

@@ -235,9 +235,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 142216348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ebcd1c58809a2a4a9955d8918b4a268, type: 3}
+  m_Script: {fileID: 11500000, guid: c75d4e117cc1e4ce1addc2702705a314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startObject: {fileID: 0}
+  images: []
+  randomCardObjetive: {fileID: 0}
+  maxCards: 3
 --- !u!1 &612535655
 GameObject:
   m_ObjectHideFlags: 0
@@ -751,8 +755,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 142216353}
-        m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: Jugar
+        m_TargetAssemblyTypeName: GameControllerScript, Assembly-CSharp
+        m_MethodName: Jugar1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1229,7 +1233,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1677955614}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 142216353}
+        m_TargetAssemblyTypeName: GameControllerScript, Assembly-CSharp
+        m_MethodName: Jugar3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1677955614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1350,7 +1366,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1972524383}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 142216353}
+        m_TargetAssemblyTypeName: GameControllerScript, Assembly-CSharp
+        m_MethodName: Jugar2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1972524383
 MonoBehaviour:
   m_ObjectHideFlags: 0
