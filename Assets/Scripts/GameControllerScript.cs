@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameControllerScript : MonoBehaviour
 {
@@ -14,10 +15,16 @@ public class GameControllerScript : MonoBehaviour
 
     private MainImageScript permanentRevealedCard;
 
+    public int aciertos = 0;
+
+    public int nivelActual = 1;
+    public TextMeshProUGUI levelText;
+
     [SerializeField] private MainImageScript startObject;
     [SerializeField] private Sprite[] images;
 
     [SerializeField] private GameObject randomCardObjetive;
+    [SerializeField] private GameObject randomCardBackground;
 
     public int maxCards = 3;
 
@@ -33,6 +40,14 @@ public class GameControllerScript : MonoBehaviour
         }
 
         maxCards = PlayerPrefs.GetInt("MaxCards", 3);
+        aciertos = PlayerPrefs.GetInt("Aciertos", 0);
+
+        nivelActual = PlayerPrefs.GetInt("NivelActual", 1);
+
+        if (levelText != null)
+        {
+            levelText.text = "Nivel " + nivelActual;
+        }
 
         int gridSize = 6; // Tamaño de la cuadrícula ( 6x6 o la cantidad que decida)
         int[] locations = RandomCards(gridSize * gridSize);
@@ -132,6 +147,8 @@ public class GameControllerScript : MonoBehaviour
         if (randomCardRenderer != null)
         {
             randomCardRenderer.sprite = selectedCard.GetComponent<SpriteRenderer>().sprite;
+
+            randomCardBackground.SetActive(true);
         }
 
         permanentRevealedCard = selectedCard;
@@ -181,14 +198,31 @@ public class GameControllerScript : MonoBehaviour
         maxCards = 3;
         PlayerPrefs.SetInt("MaxCards", maxCards);
         PlayerPrefs.Save();
+
+        aciertos = 0;
+        PlayerPrefs.SetInt("Aciertos", aciertos);
+        PlayerPrefs.Save();
+
+        nivelActual = 1;
+        PlayerPrefs.SetInt("NivelActual", nivelActual);
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void Jugar2()
     {
         maxCards = 4;
-        PlayerPrefs.SetInt("MaxCards", maxCards); // Guardar el nuevo valor en PlayerPrefs
-        PlayerPrefs.Save(); // Guarda los cambios en PlayerPrefs
+        PlayerPrefs.SetInt("MaxCards", maxCards);
+        PlayerPrefs.Save();
+
+        aciertos = 2;
+        PlayerPrefs.SetInt("Aciertos", aciertos);
+        PlayerPrefs.Save();
+
+        nivelActual = 2;
+        PlayerPrefs.SetInt("NivelActual", nivelActual);
+        PlayerPrefs.Save();
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -197,6 +231,14 @@ public class GameControllerScript : MonoBehaviour
     {
         maxCards = 5;
         PlayerPrefs.SetInt("MaxCards", maxCards);
+        PlayerPrefs.Save();
+
+        aciertos = 4;
+        PlayerPrefs.SetInt("Aciertos", aciertos);
+        PlayerPrefs.Save();
+
+        nivelActual = 3;
+        PlayerPrefs.SetInt("NivelActual", nivelActual);
         PlayerPrefs.Save();
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);

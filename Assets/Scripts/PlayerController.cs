@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private bool tiempoEnMarcha = true;
 
     private bool moviendo = false;
+    private int aciertos = 0;
 
     private Vector2 input;
     private GameControllerScript gameController;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
         puntoMovimiento = transform.position;
         gameController = FindObjectOfType<GameControllerScript>();
         animator = GetComponent<Animator>();
+        aciertos = PlayerPrefs.GetInt("Aciertos", 0);
     }
 
     private void Update()
@@ -90,19 +92,47 @@ public class PlayerController : MonoBehaviour
                 // Comparar si la carta es igual a la permanente revelada
                 if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
                 {
+                    aciertos++; // Incrementar aciertos
+                    PlayerPrefs.SetInt("Aciertos", aciertos);
+                    PlayerPrefs.Save();
                     StartCoroutine(ShowSuccesMessageWithDelay());
+
+                    if (aciertos == 2)
+                    {
+                        gameController.maxCards = 4;
+                        PlayerPrefs.SetInt("MaxCards", gameController.maxCards);
+                        PlayerPrefs.Save();
+
+                        gameController.nivelActual = 2;
+                        PlayerPrefs.SetInt("NivelActual", gameController.nivelActual);
+                        PlayerPrefs.Save();
+                    }
+                    if (aciertos == 4)
+                    {
+                        gameController.maxCards = 5;
+                        PlayerPrefs.SetInt("MaxCards", gameController.maxCards);
+                        PlayerPrefs.Save();
+
+                        gameController.nivelActual = 3;
+                        PlayerPrefs.SetInt("NivelActual", gameController.nivelActual);
+                        PlayerPrefs.Save();
+                    }
 
                 }
                 else
                 {
                     animator.Play("Death");
-
                     StartCoroutine(ShowFailedMessageWithDelay());
-                }
 
+                    if (aciertos > 0)
+                    {
+                        aciertos--; // Reducir aciertos si falla
+                        PlayerPrefs.SetInt("Aciertos", aciertos);
+                        PlayerPrefs.Save();
+                    }
+                }
             }
         }
-
     }
 
     private void Death()
