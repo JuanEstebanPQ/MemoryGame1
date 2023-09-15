@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private GameObject succesMessage;
     [SerializeField] private GameObject failedMessage;
+    [SerializeField] private GameObject finalMessage;
 
     private bool usandoTactil = false;
 
@@ -136,7 +137,7 @@ public class PlayerController : MonoBehaviour
                     aciertos++; // Incrementar aciertos
                     PlayerPrefs.SetInt("Aciertos", aciertos);
                     PlayerPrefs.Save();
-                    StartCoroutine(ShowSuccesMessageWithDelay());
+                    StartCoroutine(ShowSuccesMessage());
 
                     if (aciertos == 2)
                     {
@@ -158,12 +159,26 @@ public class PlayerController : MonoBehaviour
                         PlayerPrefs.SetInt("NivelActual", gameController.nivelActual);
                         PlayerPrefs.Save();
                     }
+                    if (aciertos == 6)
+                    {
+                        gameController.maxCards = 6;
+                        PlayerPrefs.SetInt("MaxCards", gameController.maxCards);
+                        PlayerPrefs.Save();
+
+                        gameController.nivelActual = 4;
+                        PlayerPrefs.SetInt("NivelActual", gameController.nivelActual);
+                        PlayerPrefs.Save();
+                    }
+                    if (aciertos == 8)
+                    {
+                        StartCoroutine(ShowFinalMessage());
+                    }
 
                 }
                 else
                 {
                     animator.Play("Death");
-                    StartCoroutine(ShowFailedMessageWithDelay());
+                    StartCoroutine(ShowFailedMessage());
 
                     // if (aciertos > 0)
                     // {
@@ -185,7 +200,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowSuccesMessageWithDelay()
+    private IEnumerator ShowSuccesMessage()
     {
         yield return new WaitForSeconds(2f);
 
@@ -193,11 +208,18 @@ public class PlayerController : MonoBehaviour
         succesMessage.SetActive(true);
     }
 
-    private IEnumerator ShowFailedMessageWithDelay()
+    private IEnumerator ShowFailedMessage()
     {
         yield return new WaitForSeconds(2f);
 
         failedMessage.SetActive(true);
+    }
+
+    private IEnumerator ShowFinalMessage()
+    {
+        yield return new WaitForSeconds(2f);
+
+        finalMessage.SetActive(true);
     }
 
 
