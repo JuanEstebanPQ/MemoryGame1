@@ -6,37 +6,63 @@ public class ButtonScript : MonoBehaviour
 {
     [SerializeField] private GameControllerScript gameController;
     [SerializeField] private string functionOnClick;
-    
+    private bool isMouseDown = false;
+    private float clickTime = 0.0f;
+    private float holdTime = 5.0f;
+    private Vector3 originalScale;
 
-    public void OnMouseOver()
+    private void Start()
     {
-        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-        if (sprite != null)
-        {
-            sprite.color = Color.cyan;
-        }
+        // Almacenar la escala original del botón.
+        originalScale = transform.localScale;
     }
 
     public void OnMouseDown()
     {
-        transform.localScale = new Vector3(0.3f, 0.3f, 1.0f);
+        isMouseDown = true;
+        transform.localScale = originalScale * 0.8f;
     }
 
     public void OnMouseUp()
     {
-        transform.localScale = new Vector3(0.2f, 0.2f, 1.0f);
+        // Si se levanta el clic antes de los 5 segundos, cancela la acción.
+        if (clickTime < holdTime)
+        {
+            ResetClickData();
+            return;
+        }
+
+        // Si se mantuvo presionado durante 5 segundos o más, realiza la acción.
         if (gameController != null)
         {
             gameController.SendMessage(functionOnClick);
         }
+
+        ResetClickData();
+        transform.localScale = originalScale;
     }
 
     public void OnMouseExit()
     {
+        // Si el mouse sale del área, cancela la acción y restablece la escala.
+        ResetClickData();
+        transform.localScale = originalScale;
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-        if (sprite != null)
+    }
+
+    void Update()
+    {
+        if (isMouseDown)
         {
-            sprite.color = Color.white;
+            clickTime += Time.deltaTime;
         }
+    }
+
+
+    // Reinicia el clickTime
+    void ResetClickData()
+    {
+        isMouseDown = false;
+        clickTime = 0.0f;
     }
 }

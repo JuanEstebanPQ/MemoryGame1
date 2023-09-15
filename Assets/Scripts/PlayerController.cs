@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject succesMessage;
     [SerializeField] private GameObject failedMessage;
 
+    private bool usandoTactil = false;
+
     private void Start()
     {
 
@@ -32,31 +34,70 @@ public class PlayerController : MonoBehaviour
         gameController = FindObjectOfType<GameControllerScript>();
         animator = GetComponent<Animator>();
         aciertos = PlayerPrefs.GetInt("Aciertos", 0);
+
+        usandoTactil = IsTouchDevice();
+    }
+
+    private bool IsTouchDevice()
+    {
+        return Input.touchSupported || Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
     }
 
     private void Update()
     {
-        input.x = Input.GetAxisRaw("Horizontal");
-        input.y = Input.GetAxisRaw("Vertical");
-
-        if (moviendo)
+        if (usandoTactil)
         {
-            transform.position = Vector2.MoveTowards(transform.position, puntoMovimiento, velocidadMovimiento * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, puntoMovimiento) == 0)
+            if (moviendo)
             {
-                moviendo = false;
+                transform.position = Vector2.MoveTowards(transform.position, puntoMovimiento, velocidadMovimiento * Time.deltaTime);
+
+                if (Vector2.Distance(transform.position, puntoMovimiento) == 0)
+                {
+                    moviendo = false;
+                }
+            }
+            else if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+
+                if (touch.phase == TouchPhase.Began)
+                {
+
+                    Vector2 puntoEvaluar = new Vector2(transform.position.x, transform.position.y) + offsetPuntoMovimiento + touchPosition;
+
+                    if (!Physics2D.OverlapCircle(puntoEvaluar, radioCirculo, Wall))
+                    {
+                        moviendo = true;
+                        puntoMovimiento = touchPosition;
+                    }
+                }
             }
         }
-
-        if ((input.x != 0 || input.y != 0) && !moviendo)
+        else
         {
-            Vector2 puntoEvaluar = new Vector2(transform.position.x, transform.position.y) + offsetPuntoMovimiento + input;
+            input.x = Input.GetAxisRaw("Horizontal");
+            input.y = Input.GetAxisRaw("Vertical");
 
-            if (!Physics2D.OverlapCircle(puntoEvaluar, radioCirculo, Wall))
+            if (moviendo)
             {
-                moviendo = true;
-                puntoMovimiento += input;
+                transform.position = Vector2.MoveTowards(transform.position, puntoMovimiento, velocidadMovimiento * Time.deltaTime);
+
+                if (Vector2.Distance(transform.position, puntoMovimiento) == 0)
+                {
+                    moviendo = false;
+                }
+            }
+
+            if ((input.x != 0 || input.y != 0) && !moviendo)
+            {
+                Vector2 puntoEvaluar = new Vector2(transform.position.x, transform.position.y) + offsetPuntoMovimiento + input;
+
+                if (!Physics2D.OverlapCircle(puntoEvaluar, radioCirculo, Wall))
+                {
+                    moviendo = true;
+                    puntoMovimiento += input;
+                }
             }
         }
     }
@@ -124,12 +165,12 @@ public class PlayerController : MonoBehaviour
                     animator.Play("Death");
                     StartCoroutine(ShowFailedMessageWithDelay());
 
-                    if (aciertos > 0)
-                    {
-                        aciertos--; // Reducir aciertos si falla
-                        PlayerPrefs.SetInt("Aciertos", aciertos);
-                        PlayerPrefs.Save();
-                    }
+                    // if (aciertos > 0)
+                    // {
+                    //     aciertos--; // Reducir aciertos si falla
+                    //     PlayerPrefs.SetInt("Aciertos", aciertos);
+                    //     PlayerPrefs.Save();
+                    // }
                 }
             }
         }

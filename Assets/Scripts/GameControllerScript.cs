@@ -193,7 +193,7 @@ public class GameControllerScript : MonoBehaviour
         SceneManager.LoadScene("MenuScene");
     }
 
-    public void Jugar1()
+    public void Empezar()
     {
         maxCards = 3;
         PlayerPrefs.SetInt("MaxCards", maxCards);
@@ -208,39 +208,40 @@ public class GameControllerScript : MonoBehaviour
         PlayerPrefs.Save();
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
     }
 
-    public void Jugar2()
-    {
-        maxCards = 4;
-        PlayerPrefs.SetInt("MaxCards", maxCards);
-        PlayerPrefs.Save();
+    // public void Jugar2()
+    // {
+    //     maxCards = 4;
+    //     PlayerPrefs.SetInt("MaxCards", maxCards);
+    //     PlayerPrefs.Save();
 
-        aciertos = 2;
-        PlayerPrefs.SetInt("Aciertos", aciertos);
-        PlayerPrefs.Save();
+    //     aciertos = 2;
+    //     PlayerPrefs.SetInt("Aciertos", aciertos);
+    //     PlayerPrefs.Save();
 
-        nivelActual = 2;
-        PlayerPrefs.SetInt("NivelActual", nivelActual);
-        PlayerPrefs.Save();
+    //     nivelActual = 2;
+    //     PlayerPrefs.SetInt("NivelActual", nivelActual);
+    //     PlayerPrefs.Save();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    //     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    // }
 
-    public void Jugar3()
-    {
-        maxCards = 5;
-        PlayerPrefs.SetInt("MaxCards", maxCards);
-        PlayerPrefs.Save();
+    // public void Jugar3()
+    // {
+    //     maxCards = 5;
+    //     PlayerPrefs.SetInt("MaxCards", maxCards);
+    //     PlayerPrefs.Save();
 
-        aciertos = 4;
-        PlayerPrefs.SetInt("Aciertos", aciertos);
-        PlayerPrefs.Save();
+    //     aciertos = 4;
+    //     PlayerPrefs.SetInt("Aciertos", aciertos);
+    //     PlayerPrefs.Save();
 
-        nivelActual = 3;
-        PlayerPrefs.SetInt("NivelActual", nivelActual);
-        PlayerPrefs.Save();
+    //     nivelActual = 3;
+    //     PlayerPrefs.SetInt("NivelActual", nivelActual);
+    //     PlayerPrefs.Save();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    //     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    // }
 }
