@@ -188,7 +188,7 @@ public class GameControllerScript : MonoBehaviour
     }
 
 
-    private void ReturnToMenuScene()
+    public void ReturnToMenuScene()
     {
         SceneManager.LoadScene("MenuScene");
     }

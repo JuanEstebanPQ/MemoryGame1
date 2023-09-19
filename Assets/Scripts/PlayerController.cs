@@ -26,7 +26,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject failedMessage;
     [SerializeField] private GameObject finalMessage;
 
+    private float tiempoSinMovimiento = 0.0f;
+    [SerializeField] private float tiempoLimiteSinMovimiento = 10.0f;
+    [SerializeField] private GameObject mensajeDeAviso;
+    private bool mensajeMostrado = false;
+
     private bool usandoTactil = false;
+
+    // private bool tocandoCarta = false;
 
     private void Start()
     {
@@ -101,6 +108,29 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        if (!moviendo)
+        {
+            tiempoSinMovimiento += Time.deltaTime;
+
+            if (tiempoSinMovimiento >= tiempoLimiteSinMovimiento && !mensajeMostrado)
+            {
+                if (mensajeDeAviso != null)
+                {
+                    mensajeDeAviso.SetActive(true);
+                    mensajeMostrado = true;
+                }
+            }
+        }
+        else
+        {
+            tiempoSinMovimiento = 0.0f;
+            if (mensajeMostrado)
+            {
+                mensajeDeAviso.SetActive(false);
+                mensajeMostrado = false;
+            }
+        }
     }
 
     private void OnDrawGizmos()
@@ -119,22 +149,24 @@ public class PlayerController : MonoBehaviour
         moviendo = value;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if (tiempoEnMarcha) // Verifica si el tiempo está en marcha
         {
             return;
         }
 
-        if (other.CompareTag("Card"))
+        if (collider.CompareTag("Card"))
         {
-            MainImageScript card = other.GetComponent<MainImageScript>();
+            MainImageScript card = collider.GetComponent<MainImageScript>();
             if (card != null)
             {
+                // tocandoCarta = true;
+
                 // Comparar si la carta es igual a la permanente revelada
                 if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
                 {
-                    aciertos++; // Incrementar aciertos
+                    aciertos++;
                     PlayerPrefs.SetInt("Aciertos", aciertos);
                     PlayerPrefs.Save();
                     StartCoroutine(ShowSuccesMessage());
@@ -174,22 +206,27 @@ public class PlayerController : MonoBehaviour
                         StartCoroutine(ShowFinalMessage());
                     }
 
+                
+
                 }
                 else
                 {
                     animator.Play("Death");
                     StartCoroutine(ShowFailedMessage());
-
-                    // if (aciertos > 0)
-                    // {
-                    //     aciertos--; // Reducir aciertos si falla
-                    //     PlayerPrefs.SetInt("Aciertos", aciertos);
-                    //     PlayerPrefs.Save();
-                    // }
                 }
             }
         }
+
+        else
+        {
+            StartCoroutine(ShowFailedMessage());
+        }
     }
+
+//     public bool EstaTocandoCarta()
+// {
+//     return tocandoCarta;
+// }
 
     private void Death()
     {
@@ -208,7 +245,7 @@ public class PlayerController : MonoBehaviour
         succesMessage.SetActive(true);
     }
 
-    private IEnumerator ShowFailedMessage()
+    public IEnumerator ShowFailedMessage()
     {
         yield return new WaitForSeconds(2f);
 

@@ -13,11 +13,17 @@ public class TimeController : MonoBehaviour
 
     private GameControllerScript gameController;
 
+    // private PlayerController playerController;
+
+    
+
     private void Awake()
     {
         restante = (min * 60) + seg;
         enMarcha = true;
         gameController = FindObjectOfType<GameControllerScript>();
+
+        // playerController = FindObjectOfType<PlayerController>();
     }
 
     void Update()
@@ -37,6 +43,14 @@ public class TimeController : MonoBehaviour
 
         if (!enMarcha)
         {
+
+            // bool jugadorTocandoCarta = FindObjectOfType<PlayerController>().EstaTocandoCarta();
+
+            // if (!jugadorTocandoCarta)
+            // {
+            //     StartCoroutine(playerController.ShowFailedMessage());
+            // }
+
             gameController.RevealAllCards(); // Revelar todas las cartas
 
             // Cambiar tiempoEnMarcha a false en el PlayerController
