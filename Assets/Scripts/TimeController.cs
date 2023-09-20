@@ -8,14 +8,17 @@ public class TimeController : MonoBehaviour
     [SerializeField] int min, seg;
     [SerializeField] Text tiempo;
 
+    [SerializeField] private LayerMask Wall; // Definimos la variable Wall
+    [SerializeField] private float radioCirculo;
+
     private float restante;
     private bool enMarcha;
 
     private GameControllerScript gameController;
 
-    // private PlayerController playerController;
+    private PlayerController playerController;
 
-    
+
 
     private void Awake()
     {
@@ -23,7 +26,7 @@ public class TimeController : MonoBehaviour
         enMarcha = true;
         gameController = FindObjectOfType<GameControllerScript>();
 
-        // playerController = FindObjectOfType<PlayerController>();
+        playerController = FindObjectOfType<PlayerController>();
     }
 
     void Update()
@@ -34,6 +37,7 @@ public class TimeController : MonoBehaviour
             if (restante < 1)
             {
                 enMarcha = false;
+                // VerificarColisionConCarta();
             }
 
             int tempMin = Mathf.FloorToInt(restante / 60);
@@ -64,4 +68,16 @@ public class TimeController : MonoBehaviour
             }
         }
     }
+
+    // void VerificarColisionConCarta()
+    // {
+    //     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radioCirculo, Wall);
+
+    //     // Si no hay colisiones con cartas al final del tiempo, muestra el mensaje de failed
+    //     if (colliders.Length == 0)
+    //     {
+    //         StartCoroutine(playerController.ShowFailedMessage());
+    //     }
+
+    // }
 }

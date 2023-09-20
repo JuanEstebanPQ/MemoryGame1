@@ -26,6 +26,8 @@ public class GameControllerScript : MonoBehaviour
     [SerializeField] private GameObject randomCardObjetive;
     [SerializeField] private GameObject randomCardBackground;
 
+    [SerializeField] private GameObject tutorialMessage;
+
     public int maxCards = 3;
 
 
@@ -207,7 +209,14 @@ public class GameControllerScript : MonoBehaviour
         PlayerPrefs.SetInt("NivelActual", nivelActual);
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Time.timeScale = 0;
+
+        SceneManager.LoadScene("MainScene");
+
+        tutorialMessage.SetActive(true);
+
+
+
 
     }
 

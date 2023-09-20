@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
 
     private bool usandoTactil = false;
 
+    private bool primerMovimiento = false;
+
     // private bool tocandoCarta = false;
 
     private void Start()
@@ -78,6 +80,7 @@ public class PlayerController : MonoBehaviour
                     {
                         moviendo = true;
                         puntoMovimiento = touchPosition;
+                        primerMovimiento = true;
                     }
                 }
             }
@@ -105,6 +108,7 @@ public class PlayerController : MonoBehaviour
                 {
                     moviendo = true;
                     puntoMovimiento += input;
+                    primerMovimiento = true;
                 }
             }
         }
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
         {
             tiempoSinMovimiento += Time.deltaTime;
 
-            if (tiempoSinMovimiento >= tiempoLimiteSinMovimiento && !mensajeMostrado)
+            if (tiempoSinMovimiento >= tiempoLimiteSinMovimiento && !mensajeMostrado && !primerMovimiento)
             {
                 if (mensajeDeAviso != null)
                 {
@@ -128,7 +132,7 @@ public class PlayerController : MonoBehaviour
             if (mensajeMostrado)
             {
                 mensajeDeAviso.SetActive(false);
-                mensajeMostrado = false;
+                // mensajeMostrado = false;
             }
         }
     }
@@ -169,7 +173,9 @@ public class PlayerController : MonoBehaviour
                     aciertos++;
                     PlayerPrefs.SetInt("Aciertos", aciertos);
                     PlayerPrefs.Save();
+                    StartCoroutine(CloseFailedMessage());
                     StartCoroutine(ShowSuccesMessage());
+
 
                     if (aciertos == 2)
                     {
@@ -206,8 +212,6 @@ public class PlayerController : MonoBehaviour
                         StartCoroutine(ShowFinalMessage());
                     }
 
-                
-
                 }
                 else
                 {
@@ -216,17 +220,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
-        else
-        {
-            StartCoroutine(ShowFailedMessage());
-        }
     }
 
-//     public bool EstaTocandoCarta()
-// {
-//     return tocandoCarta;
-// }
+    // public bool EstaTocandoCarta()
+    // {
+    //     return tocandoCarta;
+    // }
 
     private void Death()
     {
@@ -250,6 +249,13 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         failedMessage.SetActive(true);
+    }
+
+    public IEnumerator CloseFailedMessage()
+    {
+        yield return new WaitForSeconds(1f);
+
+        failedMessage.SetActive(false);
     }
 
     private IEnumerator ShowFinalMessage()

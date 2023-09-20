@@ -7,6 +7,7 @@ public class MainImageScript : MonoBehaviour
     [SerializeField] private GameObject Unknow;
     [SerializeField] private GameObject Hole;
 
+
     private int _spriteId;
     public int spriteId
     {

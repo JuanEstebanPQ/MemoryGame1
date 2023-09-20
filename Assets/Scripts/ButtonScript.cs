@@ -25,26 +25,18 @@ public class ButtonScript : MonoBehaviour
 
     public void OnMouseUp()
     {
-        // Si se levanta el clic antes de los 5 segundos, cancela la acción.
-        if (clickTime < holdTime)
+        isMouseDown = false;
+        transform.localScale = originalScale;
+        if (clickTime >= holdTime && gameController != null)
         {
-            ResetClickData();
-            return;
-        }
-
-        // Si se mantuvo presionado durante 5 segundos o más, realiza la acción.
-        if (gameController != null)
-        {
+            Debug.Log("sip");
             gameController.SendMessage(functionOnClick);
         }
-
-        ResetClickData();
-        transform.localScale = originalScale;
+        clickTime = 0.0f;
     }
 
     public void OnMouseExit()
     {
-        // Si el mouse sale del área, cancela la acción y restablece la escala.
         ResetClickData();
         transform.localScale = originalScale;
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
@@ -55,6 +47,10 @@ public class ButtonScript : MonoBehaviour
         if (isMouseDown)
         {
             clickTime += Time.deltaTime;
+            if (clickTime >= holdTime)
+            {
+                OnMouseUp(); // Llamar a OnMouseUp cuando se mantenga presionado durante 5 segundos
+            }
         }
     }
 
