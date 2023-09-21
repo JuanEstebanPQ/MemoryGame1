@@ -29,7 +29,6 @@ public class ButtonScript : MonoBehaviour
         transform.localScale = originalScale;
         if (clickTime >= holdTime && gameController != null)
         {
-            Debug.Log("sip");
             gameController.SendMessage(functionOnClick);
         }
         clickTime = 0.0f;

@@ -8,17 +8,28 @@ public class MessageTimer : MonoBehaviour
     public GameObject succesMessage;
     public GameObject failedMessage;
     public GameObject finalMessage;
-    public float timer = 60f; 
+    public GameObject tutorialMessage;
+    public GameObject alertMessage;
+    public float timer = 60f;
+    public float alertTimer = 10f;
 
     void Update()
     {
-        if (succesMessage.activeSelf || failedMessage.activeSelf || finalMessage.activeSelf)
+        if (succesMessage.activeSelf || failedMessage.activeSelf || finalMessage.activeSelf || tutorialMessage.activeSelf)
         {
             timer -= Time.deltaTime;
 
             if (timer <= 0f)
             {
                 SceneManager.LoadScene("MenuScene");
+            }
+        }
+        if (alertMessage.activeSelf)
+        {
+            alertTimer -= Time.deltaTime;
+            if (alertTimer <= 0f)
+            {
+                alertMessage.SetActive(false);
             }
         }
     }

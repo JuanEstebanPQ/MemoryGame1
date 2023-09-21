@@ -35,6 +35,27 @@ public class GameControllerScript : MonoBehaviour
     private void Start()
     {
 
+        bool showTutorial = PlayerPrefs.GetInt("showTutorial", 0) == 1;
+
+        if (showTutorial)
+        {
+            tutorialMessage.SetActive(true);
+
+
+            Time.timeScale = 0;
+        }
+        else
+        {
+            tutorialMessage.SetActive(false);
+
+            Time.timeScale = 1;
+        }
+
+        PlayerPrefs.SetInt("showTutorial", 0);
+        PlayerPrefs.Save();
+
+
+
         int[] originalCards = new int[maxCards];
         for (int i = 0; i < maxCards; i++)
         {
@@ -51,7 +72,7 @@ public class GameControllerScript : MonoBehaviour
             levelText.text = "Nivel " + nivelActual;
         }
 
-        int gridSize = 6; // Tamaño de la cuadrícula ( 6x6 o la cantidad que decida)
+        int gridSize = 6;
         int[] locations = RandomCards(gridSize * gridSize);
 
         Vector3 startPosition = startObject.transform.position;
@@ -87,7 +108,7 @@ public class GameControllerScript : MonoBehaviour
 
     private int[] RandomCards(int count)
     {
-        // Asegúrate de que count sea igual o mayor que maxCards
+
         if (count < maxCards)
         {
             count = maxCards;
@@ -211,46 +232,16 @@ public class GameControllerScript : MonoBehaviour
 
         Time.timeScale = 0;
 
+        PlayerPrefs.SetInt("showTutorial", 1);
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene("MainScene");
-
-        tutorialMessage.SetActive(true);
-
-
-
-
     }
 
-    // public void Jugar2()
-    // {
-    //     maxCards = 4;
-    //     PlayerPrefs.SetInt("MaxCards", maxCards);
-    //     PlayerPrefs.Save();
+    public void CloseTutorial()
+    {
+        tutorialMessage.SetActive(false);
 
-    //     aciertos = 2;
-    //     PlayerPrefs.SetInt("Aciertos", aciertos);
-    //     PlayerPrefs.Save();
-
-    //     nivelActual = 2;
-    //     PlayerPrefs.SetInt("NivelActual", nivelActual);
-    //     PlayerPrefs.Save();
-
-    //     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    // }
-
-    // public void Jugar3()
-    // {
-    //     maxCards = 5;
-    //     PlayerPrefs.SetInt("MaxCards", maxCards);
-    //     PlayerPrefs.Save();
-
-    //     aciertos = 4;
-    //     PlayerPrefs.SetInt("Aciertos", aciertos);
-    //     PlayerPrefs.Save();
-
-    //     nivelActual = 3;
-    //     PlayerPrefs.SetInt("NivelActual", nivelActual);
-    //     PlayerPrefs.Save();
-
-    //     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    // }
+        Time.timeScale = 1;
+    }
 }

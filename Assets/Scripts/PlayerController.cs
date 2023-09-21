@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private bool usandoTactil = false;
 
     private bool primerMovimiento = false;
+    [SerializeField] public GameObject startArea;
 
     // private bool tocandoCarta = false;
 
@@ -163,13 +164,13 @@ public class PlayerController : MonoBehaviour
         if (collider.CompareTag("Card"))
         {
             MainImageScript card = collider.GetComponent<MainImageScript>();
-            if (card != null)
+            if (card != null && !moviendo)
             {
-                // tocandoCarta = true;
 
                 // Comparar si la carta es igual a la permanente revelada
                 if (card.spriteId == gameController.PermanentRevealedCard.spriteId)
                 {
+                    animator.Play("Win");
                     aciertos++;
                     PlayerPrefs.SetInt("Aciertos", aciertos);
                     PlayerPrefs.Save();
@@ -220,12 +221,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        else if (collider.CompareTag("startArea"))
+        {
+            animator.Play("DeathDefault");
+            StartCoroutine(ShowFailedMessage());
+        }
     }
-
-    // public bool EstaTocandoCarta()
-    // {
-    //     return tocandoCarta;
-    // }
 
     private void Death()
     {
