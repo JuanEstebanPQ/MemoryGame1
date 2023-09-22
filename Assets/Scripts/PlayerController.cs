@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
 
     [SerializeField] private float velocidadMovimiento;
-    [SerializeField] private Vector2 puntoMovimiento;
+    [SerializeField] public Vector2 puntoMovimiento;
 
     [SerializeField] private Vector2 offsetPuntoMovimiento;
     [SerializeField] private LayerMask Wall;
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if ((input.x != 0 || input.y != 0) && !moviendo)
+            if ((input.x != 0 ^ input.y != 0) && !moviendo) // || para permitir diagonal
             {
                 Vector2 puntoEvaluar = new Vector2(transform.position.x, transform.position.y) + offsetPuntoMovimiento + input;
 
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
         if (collider.CompareTag("Card"))
         {
             MainImageScript card = collider.GetComponent<MainImageScript>();
-            if (card != null && !moviendo)
+            if (card != null)
             {
 
                 // Comparar si la carta es igual a la permanente revelada
